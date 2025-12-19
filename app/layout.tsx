@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import { FaComments } from "react-icons/fa";
+
 import AssistantWidget from "./components/AssistantWidget";
 
 const outfit = Outfit({
