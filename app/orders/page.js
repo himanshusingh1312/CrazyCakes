@@ -794,9 +794,9 @@ const OrdersPage = () => {
                     {/* Left: Product Info */}
                     <div>
                       <div className="mb-4 flex  sm:flex-row flex-col items-start gap-4">
-                        {order.product?.images?.[0] && (
+                        {order.product?.images?.[0]?.url && (
                           <img
-                            src={order.product.images[0]}
+                            src={order.product.images[0]?.url}
                             alt={order.product?.name}
                             className="h-24 w-24 rounded-lg object-cover"
                             onError={(e) => {
@@ -823,13 +823,13 @@ const OrdersPage = () => {
                         </div>
                       </div>
 
-                      {order.customizeImage && (
+                      {order.customizeImage?.url && (
                         <div className="mb-2">
                           <p className="mb-1 text-xs font-medium text-[#8a6a52]">
                             Customize Image:
                           </p>
                           <img
-                            src={order.customizeImage}
+                            src={order.customizeImage.url}
                             alt="Customize"
                             className="h-16 w-16 rounded border border-[#e5d4c4] object-cover"
                             onError={(e) => {

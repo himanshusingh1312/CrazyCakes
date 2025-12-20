@@ -1026,7 +1026,7 @@ const AssistantWidget = () => {
                 <div className="mt-3 grid grid-cols-2 gap-3">
                   {msg.products.map((product, productIdx) => {
                     const images = Array.isArray(product.images) ? product.images : [];
-                    const mainImage = images[0];
+                    const mainImage = images[0].url;
                     return (
                       <div
                         key={product._id}

@@ -684,7 +684,8 @@ const AssistantPage = () => {
                           const images = Array.isArray(product.images)
                             ? product.images
                             : [];
-                          const mainImage = images[0];
+                            
+                          const mainImage = images[0].url;
 
                           return (
                             <div

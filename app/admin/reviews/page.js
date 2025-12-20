@@ -371,9 +371,9 @@ const AdminReviewsPage = () => {
                     {/* Left: Order & User Info */}
                     <div className="lg:col-span-2">
                       <div className="mb-3 md:mb-4 flex sm:flex-row flex-col items-start gap-3 md:gap-4">
-                        {order.product?.images?.[0] && (
+                        {order.product?.images?.[0].url && (
                           <img
-                            src={order.product.images[0]}
+                            src={order.product.images[0].url}
                             alt={order.product?.name}
                             className="h-16 w-16 md:h-20 md:w-20 rounded-lg object-cover"
                             onError={(e) => {

@@ -77,7 +77,7 @@ const BlogPage = () => {
                   {/* Image with Date Badge */}
                   <div className="relative sm:h-64 h-56 overflow-hidden">
                     <img
-                      src={blog.image}
+                      src={blog.image?.url}
                       alt={blog.title}
                       className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
                       onError={(e) => {
@@ -139,9 +139,9 @@ const BlogPage = () => {
                     {/* Author and Date */}
                     <div className="flex items-center justify-between pt-4 border-t border-[#e5d4c4]">
                       <div className="flex items-center gap-2">
-                        {blog.authorId?.photo ? (
+                        {blog.authorId?.photo.url ? (
                           <img
-                            src={blog.authorId.photo}
+                            src={blog.authorId.photo.url}
                             alt={blog.author}
                             className="h-8 w-8 rounded-full object-cover border border-[#e5d4c4]"
                             onError={(e) => {

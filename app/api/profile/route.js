@@ -3,31 +3,30 @@ import { connectDB } from "@/lib/dbConnect";
 import { User } from "@/lib/schema/user";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import fs from "fs/promises";
-import path from "path";
-import crypto from "crypto";
+import cloudinary from "@/lib/cloudinary";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
+const JWT_SECRET =
+  process.env.JWT_SECRET || "your-secret-key-change-in-production";
 
-// Helper to verify token and get user
+// Verify JWT
 const verifyToken = (request) => {
   const authHeader = request.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return null;
-  }
-  const token = authHeader.split(" ")[1];
+  if (!authHeader || !authHeader.startsWith("Bearer ")) return null;
+
   try {
-    return jwt.verify(token, JWT_SECRET);
-  } catch (e) {
+    return jwt.verify(authHeader.split(" ")[1], JWT_SECRET);
+  } catch {
     return null;
   }
 };
 
-// Get current user profile
+/* ======================
+   GET PROFILE
+====================== */
 export async function GET(request) {
   try {
     const decoded = verifyToken(request);
-    if (!decoded || !decoded.userId) {
+    if (!decoded?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -38,13 +37,15 @@ export async function GET(request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Ensure photo field is included (even if empty)
-    const userData = {
-      ...user.toObject(),
-      photo: user.photo || "",
-    };
-
-    return NextResponse.json({ user: userData }, { status: 200 });
+    return NextResponse.json(
+      {
+        user: {
+          ...user.toObject(),
+          photo: user.photo || null,
+        },
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Get profile error:", error);
     return NextResponse.json(
@@ -54,11 +55,13 @@ export async function GET(request) {
   }
 }
 
-// Update user profile
+/* ======================
+   UPDATE PROFILE
+====================== */
 export async function PUT(request) {
   try {
     const decoded = verifyToken(request);
-    if (!decoded || !decoded.userId) {
+    if (!decoded?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -69,47 +72,29 @@ export async function PUT(request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Allow both "user" and "admin" types to update their profile
-    if (user.type !== "user" && user.type !== "admin") {
-      return NextResponse.json(
-        { error: "Invalid user type" },
-        { status: 403 }
-      );
-    }
+    const formData = await request.formData();
 
-    const contentType = request.headers.get("content-type") || "";
-    let name, email, address, pincode, phone, password;
-    let photoFile = null;
-
-    // Check if request is FormData (for photo upload) or JSON
-    // FormData requests have content-type starting with "multipart/form-data"
-    if (contentType.includes("multipart/form-data")) {
-      const formData = await request.formData();
-      name = formData.get("name");
-      email = formData.get("email");
-      address = formData.get("address");
-      pincode = formData.get("pincode");
-      phone = formData.get("phone");
-      password = formData.get("password");
-      photoFile = formData.get("photo");
-    } else {
-      // JSON request
-      const body = await request.json();
-      name = body.name;
-      email = body.email;
-      address = body.address;
-      pincode = body.pincode;
-      phone = body.phone;
-      password = body.password;
-    }
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const address = formData.get("address");
+    const pincode = formData.get("pincode");
+    const phone = formData.get("phone");
+    const password = formData.get("password");
+    const photoFile = formData.get("photo");
 
     const updateData = {};
 
-    if (name !== undefined) updateData.name = name;
-    if (email !== undefined) {
-      // Check if email is already taken by another user
-      const existingUser = await User.findOne({ email, _id: { $ne: decoded.userId } });
-      if (existingUser) {
+    if (name) updateData.name = name;
+    if (address) updateData.address = address;
+    if (pincode) updateData.pincode = Number(pincode);
+    if (phone) updateData.phone = Number(phone);
+
+    if (email) {
+      const exists = await User.findOne({
+        email,
+        _id: { $ne: decoded.userId },
+      });
+      if (exists) {
         return NextResponse.json(
           { error: "Email already in use" },
           { status: 400 }
@@ -117,44 +102,41 @@ export async function PUT(request) {
       }
       updateData.email = email;
     }
-    if (address !== undefined) updateData.address = address;
-    if (pincode !== undefined) updateData.pincode = Number(pincode) || 0;
-    if (phone !== undefined) updateData.phone = Number(phone) || 0;
 
-    // Handle password update if provided
-    if (password && password.trim()) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updateData.password = hashedPassword;
+    if (password?.trim()) {
+      updateData.password = await bcrypt.hash(password, 10);
     }
 
-    // Handle photo upload if provided
+    /* ======================
+       PHOTO → CLOUDINARY
+    ====================== */
     if (photoFile && photoFile.size > 0) {
-      // Delete old photo if exists
-      if (user.photo && user.photo.trim() !== "") {
-        try {
-          const oldPhotoPath = path.join(process.cwd(), "public", user.photo);
-          const stats = await fs.stat(oldPhotoPath).catch(() => null);
-          if (stats) {
-            await fs.unlink(oldPhotoPath);
-          }
-        } catch (err) {
-          console.error("Error deleting old photo:", err);
-        }
+      // delete old photo
+      if (user.photo?.public_id) {
+        await cloudinary.uploader.destroy(user.photo.public_id);
       }
 
-      // Save new photo
-      const uploadsDir = path.join(process.cwd(), "public", "uploads", "profiles");
-      await fs.mkdir(uploadsDir, { recursive: true });
+      const buffer = Buffer.from(await photoFile.arrayBuffer());
 
-      const bytes = await photoFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      const upload = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              folder: "profiles",
+              resource_type: "image",
+            },
+            (err, result) => {
+              if (err) reject(err);
+              else resolve(result);
+            }
+          )
+          .end(buffer);
+      });
 
-      const ext = path.extname(photoFile.name || "") || ".jpg";
-      const fileName = `${crypto.randomUUID()}${ext}`;
-      const filePath = path.join(uploadsDir, fileName);
-
-      await fs.writeFile(filePath, buffer);
-      updateData.photo = `/uploads/profiles/${fileName}`;
+      updateData.photo = {
+        url: upload.secure_url,
+        public_id: upload.public_id,
+      };
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -163,14 +145,11 @@ export async function PUT(request) {
       { new: true }
     ).select("-password");
 
-    // Ensure photo field is included in response
-    const userData = {
-      ...updatedUser.toObject(),
-      photo: updatedUser.photo || "",
-    };
-
     return NextResponse.json(
-      { message: "Profile updated successfully", user: userData },
+      {
+        message: "Profile updated successfully",
+        user: updatedUser,
+      },
       { status: 200 }
     );
   } catch (error) {
@@ -181,4 +160,3 @@ export async function PUT(request) {
     );
   }
 }
-

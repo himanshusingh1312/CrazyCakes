@@ -86,8 +86,14 @@ const ProductDetailPage = () => {
     return () => window.removeEventListener("wishlistUpdated", handleWishlistUpdate);
   }, [productId]);
 
-  const images = Array.isArray(product?.images) ? product.images : [];
-  const mainImage = images[activeIndex] || images[0];
+const images = Array.isArray(product?.images)
+  ? product.images.map((img) =>
+      typeof img === "string" ? img : img.url
+    )
+  : [];
+
+const mainImage = images[activeIndex] || images[0];
+
 
   const areas = [
     "Aishbagh",
@@ -262,7 +268,7 @@ const handleChange = (e) => {
       _id: product._id,
       name: product.name,
       price: product.price,
-      images: product.images,
+      images: images,
       size: Number(formData.size),
       area: formData.area,
       city: formData.city,
@@ -294,7 +300,7 @@ const handleChange = (e) => {
         _id: product._id,
         name: product.name,
         price: product.price,
-        images: product.images,
+        images: images,
         specification: product.specification,
         tag: product.tag,
       });
@@ -328,7 +334,7 @@ const handleChange = (e) => {
         _id: product._id,
         name: product.name,
         price: product.price,
-        images: product.images,
+        images: images,
       },
       formData: {
         city: formData.city,

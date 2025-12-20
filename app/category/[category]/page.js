@@ -227,7 +227,7 @@ const CategoryPage = () => {
                     <img
                       src={sub.image}
                       alt={sub.name}
-                      className="h-48 w-full object-cover transition group-hover:scale-105"
+                      className="h-48 lg:h-56 xl:h-64 w-full object-cover transition group-hover:scale-105"
                     />
                   )}
                   <div className="p-4">

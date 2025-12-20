@@ -368,30 +368,37 @@ const Header = () => {
                     <span className="rounded-full bg-[#5b3a29] px-2 py-1 text-xs font-semibold text-white">
                       Admin
                     </span>
-                  )}
-                  <div className="cursor-pointer flex items-center gap-2 transition">
-                    {user.photo && user.photo.trim() !== "" ? (
-                      <img
-                        src={user.photo}
-                        alt={user.name || "User"}
-                        className="h-8 w-8 rounded-full object-cover border-2 border-[#5b3a29]"
-                        onError={(e) => {
-                          e.target.src = "";
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    ) : null}
-                    {(!user.photo || user.photo.trim() === "") && (
-                      <div className="h-8 w-8 rounded-full bg-[#5b3a29] flex items-center justify-center border-2 border-[#5b3a29]">
-                        <span className="text-xs font-semibold text-white">
-                          {user.name ? user.name.charAt(0).toUpperCase() : user.email ? user.email.charAt(0).toUpperCase() : "U"}
-                        </span>
-                      </div>
-                    )}
-                    <span className="text-sm font-medium text-[#5b3a29] hover:text-[#3e261a]">
-                      {user.name ? user.name.split(" ")[0] : (user.email ? user.email.split("@")[0] : "User")}
-                    </span>
-                  </div>
+                  )}<div className="cursor-pointer flex items-center gap-2 transition">
+  {user?.photo?.url ? (
+    <img
+      src={user.photo.url}
+      alt={user.name || "User"}
+      className="h-8 w-8 rounded-full object-cover border-2 border-[#5b3a29]"
+      onError={(e) => {
+        e.currentTarget.style.display = "none";
+      }}
+    />
+  ) : (
+    <div className="h-8 w-8 rounded-full bg-[#5b3a29] flex items-center justify-center border-2 border-[#5b3a29]">
+      <span className="text-xs font-semibold text-white">
+        {user?.name
+          ? user.name.charAt(0).toUpperCase()
+          : user?.email
+          ? user.email.charAt(0).toUpperCase()
+          : "U"}
+      </span>
+    </div>
+  )}
+
+  <span className="text-sm font-medium text-[#5b3a29] hover:text-[#3e261a]">
+    {user?.name
+      ? user.name.split(" ")[0]
+      : user?.email
+      ? user.email.split("@")[0]
+      : "User"}
+  </span>
+</div>
+
 
                   {/* Hover dropdown with Dashboard, Orders, Profile, and Logout */}
                   <div className="invisible absolute right-0 top-full w-44 rounded-lg border border-[#f1e4d8] bg-white py-1 text-sm shadow-lg opacity-0 transition group-hover:visible group-hover:opacity-100">

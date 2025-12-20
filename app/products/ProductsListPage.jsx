@@ -319,10 +319,10 @@ const ProductsListPage = () => {
                     onClick={() => handleViewProduct(product._id)}
                     className="overflow-hidden rounded-2xl border border-[#f1e4d8] bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                   >
-                    <div className="relative h-56 w-full overflow-hidden bg-[#f1e4d8]">
+                    <div className="relative h-56 xl:h-64 w-full overflow-hidden bg-[#f1e4d8]">
                       {mainImage ? (
                         <img
-                          src={mainImage}
+                          src={mainImage.url}
                           alt={product.name}
                           className="h-full w-full object-cover"
                           onError={(e) => {
@@ -335,7 +335,7 @@ const ProductsListPage = () => {
                         </div>
                       )}
                     </div>
-                    <div className="p-4">
+                    <div className="p-3">
                       <h3 className="mb-1 text-lg font-semibold text-[#5b3a29]">
                         {product.name}
                       </h3>

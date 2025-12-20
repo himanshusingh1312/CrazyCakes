@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/dbConnect";
 import { Subcategory } from "@/lib/schema/subcategory";
-import fs from "fs/promises";
-import path from "path";
-import crypto from "crypto";
+import cloudinary from "@/lib/cloudinary";
 
-// Create subcategory (with image upload)
+// Create subcategory (with Cloudinary image upload)
 export async function POST(request) {
   try {
     const formData = await request.formData();
@@ -21,7 +19,7 @@ export async function POST(request) {
       );
     }
 
-    // normalise category, accept 'pastery' but store 'pastry'
+    // normalize category
     category = String(category).toLowerCase();
     if (category === "pastery") category = "pastry";
 
@@ -32,25 +30,22 @@ export async function POST(request) {
       );
     }
 
-    // Save image to public/uploads/subcategories
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const uploadsDir = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      "subcategories"
-    );
-    await fs.mkdir(uploadsDir, { recursive: true });
+    // Upload image to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "subcategories", resource_type: "auto" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(buffer);
+    });
 
-    const ext = path.extname(file.name || "") || ".jpg";
-    const fileName = `${crypto.randomUUID()}${ext}`;
-    const filePath = path.join(uploadsDir, fileName);
-
-    await fs.writeFile(filePath, buffer);
-
-    const imagePath = `/uploads/subcategories/${fileName}`;
+    const imagePath = result.secure_url;
 
     await connectDB();
 
@@ -66,10 +61,7 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error("Create subcategory error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -88,17 +80,12 @@ export async function GET(request) {
       filter.category = category;
     }
 
-    const subcategories = await Subcategory.find(filter).sort({
-      createdAt: -1,
-    });
+    const subcategories = await Subcategory.find(filter).sort({ createdAt: -1 });
 
     return NextResponse.json({ subcategories }, { status: 200 });
   } catch (error) {
     console.error("Get subcategories error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -119,61 +106,52 @@ export async function PUT(request) {
     const subcategory = await Subcategory.findById(id);
 
     if (!subcategory) {
-      return NextResponse.json(
-        { error: "Subcategory not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Subcategory not found" }, { status: 404 });
     }
 
     const updateData = {};
-
     if (name) updateData.name = name;
 
     if (category) {
       category = String(category).toLowerCase();
       if (category === "pastery") category = "pastry";
-      if (["cake", "pastry"].includes(category)) {
-        updateData.category = category;
-      }
+      if (["cake", "pastry"].includes(category)) updateData.category = category;
     }
 
-    // Handle image update if provided
+    // Handle image update
     if (file && file.size > 0) {
-      // Delete old image
-      if (subcategory.image) {
-        try {
-          const oldImagePath = path.join(process.cwd(), "public", subcategory.image);
-          await fs.unlink(oldImagePath);
-        } catch (err) {
-          console.error("Error deleting old image:", err);
-        }
-      }
-
-      // Save new image
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const uploadsDir = path.join(
-        process.cwd(),
-        "public",
-        "uploads",
-        "subcategories"
-      );
-      await fs.mkdir(uploadsDir, { recursive: true });
+      // Upload new image
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "subcategories", resource_type: "auto" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(buffer);
+      });
 
-      const ext = path.extname(file.name || "") || ".jpg";
-      const fileName = `${crypto.randomUUID()}${ext}`;
-      const filePath = path.join(uploadsDir, fileName);
+      updateData.image = result.secure_url;
 
-      await fs.writeFile(filePath, buffer);
-      updateData.image = `/uploads/subcategories/${fileName}`;
+      // Optional: delete old image from Cloudinary
+      if (subcategory.image) {
+        try {
+          const publicId = subcategory.image
+            .split("/")
+            .pop()
+            .split(".")[0];
+          await cloudinary.uploader.destroy(`subcategories/${publicId}`);
+        } catch (err) {
+          console.error("Error deleting old Cloudinary image:", err);
+        }
+      }
     }
 
-    const updatedSubcategory = await Subcategory.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true }
-    );
+    const updatedSubcategory = await Subcategory.findByIdAndUpdate(id, updateData, { new: true });
 
     return NextResponse.json(
       { message: "Subcategory updated", subcategory: updatedSubcategory },
@@ -181,10 +159,7 @@ export async function PUT(request) {
     );
   } catch (error) {
     console.error("Update subcategory error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -202,19 +177,19 @@ export async function DELETE(request) {
     const subcategory = await Subcategory.findById(id);
 
     if (!subcategory) {
-      return NextResponse.json(
-        { error: "Subcategory not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Subcategory not found" }, { status: 404 });
     }
 
-    // Delete image file
+    // Delete image from Cloudinary
     if (subcategory.image) {
       try {
-        const imagePath = path.join(process.cwd(), "public", subcategory.image);
-        await fs.unlink(imagePath);
+        const publicId = subcategory.image
+          .split("/")
+          .pop()
+          .split(".")[0];
+        await cloudinary.uploader.destroy(`subcategories/${publicId}`);
       } catch (err) {
-        console.error("Error deleting image:", err);
+        console.error("Error deleting Cloudinary image:", err);
       }
     }
 
@@ -226,11 +201,6 @@ export async function DELETE(request) {
     );
   } catch (error) {
     console.error("Delete subcategory error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-
-

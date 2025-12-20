@@ -108,19 +108,20 @@ const WishlistPage = () => {
                   className="overflow-hidden rounded-2xl border border-[#f1e4d8] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div className="relative h-56 w-full overflow-hidden bg-[#f1e4d8]">
-                    {mainImage ? (
-                      <img
-                        src={mainImage}
-                        alt={item.name}
-                        className="h-full w-full object-cover"
-                        onClick={() => handleViewProduct(item.productId || item._id)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-[#8a6a52]">
-                        No Image
-                      </div>
-                    )}
+                    {typeof mainImage === "string" ? (
+  <img
+    src={mainImage}
+    alt={item.name}
+    className="h-full w-full object-cover"
+    onClick={() => handleViewProduct(item.productId || item._id)}
+    style={{ cursor: "pointer" }}
+  />
+) : (
+  <div className="flex h-full w-full items-center justify-center text-[#8a6a52]">
+    No Image
+  </div>
+)}
+
                     <button
                       onClick={() => handleRemove(item.productId || item._id)}
                       className="absolute right-2 top-2 rounded-full bg-white/90 p-2 text-red-600 shadow-md transition hover:bg-white"

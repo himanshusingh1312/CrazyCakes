@@ -312,9 +312,9 @@ const AdminOrdersPage = () => {
                     {/* Left: Product & User Info */}
                     <div className="lg:col-span-2">
                       <div className="mb-3 md:mb-4 flex  sm:flex-row flex-col items-start gap-3 md:gap-4">
-                        {order.product?.images?.[0] && (
+                        {order.product?.images?.[0]?.url && (
                           <img
-                            src={order.product.images[0]}
+                            src={order.product.images[0].url}
                             alt={order.product?.name}
                             className="h-20 w-20 md:h-24 md:w-24 rounded-lg object-cover"
                             onError={(e) => {
@@ -344,14 +344,14 @@ const AdminOrdersPage = () => {
                         </div>
                       </div>
 
-                      {order.customizeImage && (
+                      {order.customizeImage?.url && (
                         <div className="mb-2">
                           <p className="mb-1 text-xs font-medium text-[#8a6a52]">
                             Customize Image:
                           </p>
                           <div className="flex items-center gap-2">
                             <img
-                              src={order.customizeImage}
+                              src={order.customizeImage?.url}
                               alt="Customize"
                               className="h-14 w-14 md:h-16 md:w-16 rounded border border-[#e5d4c4] object-cover"
                               onError={(e) => {
@@ -359,7 +359,7 @@ const AdminOrdersPage = () => {
                               }}
                             />
                             <button
-                              onClick={() => setPreviewImage(order.customizeImage)}
+                              onClick={() => setPreviewImage(order.customizeImage.url)}
                               className="rounded-full bg-[#5b3a29] px-3 py-1 text-xs font-semibold text-white transition hover:bg-[#3e261a]"
                             >
                               Preview

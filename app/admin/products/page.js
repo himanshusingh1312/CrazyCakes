@@ -447,9 +447,9 @@ const ProductsPage = () => {
                     key={product._id}
                     className="rounded-lg border border-[#e5d4c4] p-4"
                   >
-                    {product.images && product.images[0] && (
+                    { product.images[0].url && (
                       <img
-                        src={product.images[0]}
+                        src={product.images[0].url}
                         alt={product.name}
                         className="mb-3 h-28 md:h-32 w-full rounded-lg object-cover"
                         onError={(e) => {

@@ -147,13 +147,13 @@ const CartPage = () => {
   {/* Top row on mobile: Image + Price */}
   <div className="flex items-start justify-between sm:items-start sm:justify-start gap-4">
     {/* Image */}
-    {item.images && item.images[0] && (
-      <img
-        src={item.images[0]}
-        alt={item.name}
-        className="h-24 w-24 rounded-lg object-cover"
-      />
-    )}
+   {Array.isArray(item.images) && item.images.length > 0 && (
+  <img
+    src={typeof item.images[0] === "string" ? item.images[0] : item.images[0]?.url}
+    alt={item.name}
+    className="h-24 w-24 rounded-lg object-cover"
+  />
+)}
 
     {/* Price (mobile right, desktop right column) */}
     <div className="text-right sm:hidden">

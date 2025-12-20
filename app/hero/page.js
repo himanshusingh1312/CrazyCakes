@@ -78,6 +78,7 @@ const Hero = () => {
     loop
     muted
     playsInline
+      poster="/bgcrazy.png"
   />
 </div>
 
@@ -94,6 +95,7 @@ const Hero = () => {
     loop
     muted
     playsInline
+      poster="/bgcrazy.png"
   />
 </div>
             </div>

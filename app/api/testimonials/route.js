@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/dbConnect";
 import { Order } from "@/lib/schema/order";
-import { Products } from "@/lib/schema/products";
-import { User } from "@/lib/schema/user";
+
 
 // Get all testimonials (reviews with ratings)
 export async function GET(request) {
@@ -22,7 +21,7 @@ export async function GET(request) {
       _id: order._id,
       userName: order.user?.name || "Anonymous",
       productName: order.product?.name || "Product",
-      productImage: order.product?.images?.[0] || "",
+      productImage: order.product?.images?.[0].url || "",
       rating: order.rating,
       review: order.review,
       sentiment: order.sentiment || null,

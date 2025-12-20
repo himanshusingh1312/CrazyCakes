@@ -612,9 +612,9 @@ const DashboardPage = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        {order.product?.images?.[0] && (
+                        {order.product?.images?.[0]?.url && (
                           <img
-                            src={order.product.images[0]}
+                            src={order.product.images[0]?.url}
                             alt={order.product?.name}
                             className="h-12 w-12 lg:h-16 lg:w-16 rounded-lg object-cover"
                             onError={(e) => {

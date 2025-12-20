@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/dbConnect";
 import { Order } from "@/lib/schema/order";
-import fs from "fs/promises";
-import path from "path";
+import cloudinary from "@/lib/cloudinary";
+
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
@@ -55,21 +55,33 @@ export async function POST(request) {
     }
 
     // Handle customize image upload (optional)
-    let customizeImagePath = "";
-    const customizeFile = formData.get("customizeImage");
-    if (customizeFile && customizeFile.size > 0) {
-      const uploadsDir = path.join(process.cwd(), "public", "uploads", "customize");
-      await fs.mkdir(uploadsDir, { recursive: true });
+   let customizeImage = null;
+const customizeFile = formData.get("customizeImage");
 
-      const bytes = await customizeFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const ext = path.extname(customizeFile.name || "") || ".jpg";
-      const fileName = `${crypto.randomUUID()}${ext}`;
-      const filePath = path.join(uploadsDir, fileName);
+if (customizeFile && customizeFile.size > 0) {
+  const bytes = await customizeFile.arrayBuffer();
+  const buffer = Buffer.from(bytes);
 
-      await fs.writeFile(filePath, buffer);
-      customizeImagePath = `/uploads/customize/${fileName}`;
-    }
+  const uploadResult = await new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        {
+          folder: "orders/customize",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      )
+      .end(buffer);
+  });
+
+  customizeImage = {
+    url: uploadResult.secure_url,
+    public_id: uploadResult.public_id,
+  };
+}
+
 
     const deliveryCharge = deliveryType === "delivery" ? 50 : 0;
     const basePrice = Number(originalPrice) * Number(sizeMultiplier);
@@ -114,7 +126,7 @@ export async function POST(request) {
       phone,
       address,
       size: Number(size),
-      customizeImage: customizeImagePath,
+      customizeImage,
       instruction,
       deliveryType,
       deliveryDate,
@@ -226,10 +238,7 @@ export async function POST(request) {
                   ${instruction ? `<p style="margin: 5px 0;"><strong>Special Instructions:</strong> ${instruction}</p>` : ""}
                 </div>
 
-                ${customizeImagePath ? `<div style="margin: 20px 0;">
-                  <p style="color: #5b3a29; font-weight: bold;">Custom Image:</p>
-                  <p style="color: #8a6a52; font-size: 12px;">A custom image has been uploaded with this order.</p>
-                </div>` : ""}
+              
 
                 <div style="background-color: #fff4ea; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #5b3a29;">
                   <p style="margin: 0; color: #5b3a29;"><strong>Action Required:</strong> Please review and process this order through the admin panel.</p>
@@ -281,7 +290,7 @@ Area: ${area.charAt(0).toUpperCase() + area.slice(1)}
 Address: ${address}
 Delivery Date: ${deliveryDateFormatted}
 Delivery Time: ${deliveryTimeFormatted}
-${instruction ? `Special Instructions: ${instruction}\n` : ""}${customizeImagePath ? "Custom Image: A custom image has been uploaded with this order.\n" : ""}
+${instruction ? `Special Instructions: ${instruction}\n` : ""}
 Action Required: Please review and process this order through the admin panel.
 
 Please log in to the admin panel to manage this order.
@@ -722,15 +731,14 @@ export async function DELETE(request) {
     }
 
     // Delete customize image if it exists
-    if (order.customizeImage) {
-      try {
-        const imagePath = path.join(process.cwd(), "public", order.customizeImage);
-        await fs.unlink(imagePath);
-      } catch (imageError) {
-        // Log error but don't fail deletion if image doesn't exist
-        console.error("Error deleting customize image:", imageError);
-      }
-    }
+if (order.customizeImage?.public_id) {
+  try {
+    await cloudinary.uploader.destroy(order.customizeImage.public_id);
+  } catch (err) {
+    console.error("Cloudinary delete failed:", err);
+  }
+}
+
 
     // Delete the order
     await Order.findByIdAndDelete(orderId);

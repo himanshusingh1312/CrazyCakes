@@ -51,7 +51,7 @@ const ProfilePage = () => {
 
         // Set user from localStorage first
         setUser(parsedUser);
-        setPhotoPreview(parsedUser.photo || null);
+        setPhotoPreview(parsedUser.photo?.url || null);
         
         // Initialize form data from localStorage user
         setFormData({
@@ -82,7 +82,7 @@ const ProfilePage = () => {
               pincode: data.user.pincode?.toString() || "",
               phone: data.user.phone?.toString() || "",
             });
-            setPhotoPreview(data.user.photo || null);
+            setPhotoPreview(data.user.photo?.url || null);
             setUser(data.user);
             // Update localStorage with fresh data including photo
             localStorage.setItem("user", JSON.stringify(data.user));
@@ -165,8 +165,8 @@ const ProfilePage = () => {
       localStorage.setItem("user", JSON.stringify(data.user));
       setUser(data.user);
       setPhotoFile(null);
-      if (data.user.photo) {
-        setPhotoPreview(data.user.photo);
+      if (data.user.photo?.url) {
+        setPhotoPreview(data.user.photo?.url);
       }
       
       // Dispatch event to update header

@@ -138,7 +138,7 @@ const BlogDetailPage = () => {
           {/* Full Width Blog Image */}
           <div className="sm:mb-12 mb-8 sm:h-[500px] h-[350px] w-full overflow-hidden rounded-3xl sm:shadow-lg shadow-md animate-fade-in">
             <img
-              src={blog.image}
+              src={blog.image?.url}
               alt={blog.title}
               className="h-full w-full object-cover transition-transform duration-700 hover:scale-100"
               onError={(e) => {
@@ -168,9 +168,9 @@ const BlogDetailPage = () => {
                 {/* Author and Date */}
                 <div className="flex flex-wrap items-center gap-6 border-b-2 border-[#e5d4c4] pb-6 animate-fade-in delay-200">
                   <div className="flex items-center gap-2">
-                    {blog.authorId?.photo ? (
+                    {blog.authorId?.photo.url ? (
                       <img
-                        src={blog.authorId.photo}
+                        src={blog.authorId.photo.url}
                         alt={blog.author}
                         className="h-12 w-12 rounded-full object-cover border-2 border-[#e5d4c4]"
                         onError={(e) => {
@@ -291,7 +291,7 @@ const BlogDetailPage = () => {
                         >
                           <div className="relative h-40 overflow-hidden">
                             <img
-                              src={relatedBlog.image}
+                              src={relatedBlog.image?.url}
                               alt={relatedBlog.title}
                               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                               onError={(e) => {

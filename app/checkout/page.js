@@ -267,13 +267,17 @@ const CheckoutPage = () => {
                   Product Details
                 </h2>
                 <div className="flex gap-4">
-                  {product.images && product.images[0] && (
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="h-24 w-24 rounded-lg object-cover"
-                    />
-                  )}
+              {Array.isArray(product.images) && product.images.length > 0 && (
+  <img
+    src={
+      typeof product.images[0] === "string"
+        ? product.images[0]
+        : product.images[0]?.url
+    }
+    alt={product.name}
+    className="h-24 w-24 rounded-lg object-cover"
+  />
+)}
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-[#5b3a29]">
                       {product.name}
@@ -336,16 +340,18 @@ const CheckoutPage = () => {
                       </p>
                     </div>
                   )}
-                  {checkoutData.formData.customizeImage && (
-                    <div className="mt-3 pt-3 border-t border-[#e5d4c4]">
-                      <span className="text-[#8a6a52]">Custom Image:</span>
-                      <img
-                        src={checkoutData.formData.customizeImage}
-                        alt="Custom"
-                        className="mt-2 h-32 w-32 rounded-lg object-cover"
-                      />
-                    </div>
-                  )}
+         {typeof window !== "undefined" &&
+  sessionStorage.getItem("customizeImageData") && (
+    <div className="mt-3 pt-3 border-t border-[#e5d4c4]">
+      <span className="text-[#8a6a52]">Custom Image:</span>
+      <img
+        src={sessionStorage.getItem("customizeImageData")}
+        alt="Custom"
+        className="mt-2 h-32 w-32 rounded-lg object-cover"
+      />
+    </div>
+)}
+
                 </div>
               </div>
             </div>

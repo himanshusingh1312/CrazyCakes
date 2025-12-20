@@ -408,7 +408,7 @@ const BlogsPage = () => {
                   >
                     <div className="relative h-48 overflow-hidden">
                       <img
-                        src={blog.image}
+                        src={blog.image?.url}
                         alt={blog.title}
                         className="h-full w-full object-cover"
                         onError={(e) => {
