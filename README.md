@@ -1,62 +1,76 @@
+🍰 Crazy Cakes
 
-# Bookies 📘
+A modern, AI-powered full-stack e-commerce platform for cakes and pastries.
 
+📘 About
 
-## About
+Crazy Cakes is a full-stack e-commerce web application built using Next.js and React, designed with a strong focus on performance, scalability, and user experience. The application utilizes the Next.js App Router for efficient server-side rendering, dynamic routing, and API handling. A fully responsive and visually consistent interface is achieved using Tailwind CSS, while AOS and Framer Motion enhance the UI with smooth animations and transitions.
 
-Crazy Cakes is a full-stack e-commerce web application built using Next.js and React, designed for performance, scalability, and a smooth user experience. The application uses Next.js App Router for server-side rendering and API routes, while Tailwind CSS ensures a fully responsive and modern UI. Animations and UI interactions are enhanced with AOS, providing a polished and engaging frontend experience across all devices.
+On the backend, MongoDB with Mongoose is used for structured and scalable data management. Media assets are stored and optimized using Cloudinary, ensuring fast image delivery. Advanced features such as an AI-powered chatbot, sentiment analysis of user reviews, and dynamic admin dashboards are integrated using the Gemini API, making Crazy Cakes an intelligent, production-ready e-commerce solution.
 
+✨ Key Highlights
 
-## Features
+⚡ Fast performance with SSR and optimized assets
 
-#### Products Features
+🎨 Fully responsive modern UI
 
+🤖 AI-driven features for smarter user interaction
 
-| Feature | Coded?     | Description                |
-| :-------- | :------- | :------------------------- |
-| Sign Up |  ☑ | Ability to Create a new account  |
-| Log In |  ☑ | Ability to Log in  |
-| Cart |  ☑ | Ability to add products to the cart  |
-| Checkout |  ☑ | Ability to fill the Details   |
-| Subtotal |  ☑ | Ability to show the subtotal of cart items  |
-| Wishlist  |  ☑ | Ability to wishlist your product   |
-| Orders |  ☑ | Ability to seen your orders  |
-| Admin Login |  ☑ | Ability to login for sell their products  |
-| Add, Edit, Delete Products |  ☑ | Ability to dynamically add their products , edit and delete also  |
-|  Search Products|  ☑ | Ability to dynamically search the product |
-| Design Tool |  ☑ | Ability to design  your cake  |
-| Sentimental Analysis |  ☑ | Admin see the user perspective with the help of sentimental analysis in review section |
-| AI Chatbot |  ☑ | Chatbot help the user for search the product and book the products and also help and support |
-| Sentimental Analysis |  ☑ | Admin see the user perspective with the help of sentimental analysis in review section |
-| Update Tracking  |  ☑ | User see the order status and admin update the order status  |
-| Dynamic Dashboard |  ☑ | User and Admin see the monthly expenses and others features   |
-## Built With
+🔐 Secure authentication with Admin & User roles
 
- * HTML
+📊 Real-time analytics and order tracking
 
- * CSS
- 
- * NEXT.JS 
- 
- * REACT.JS
+🚀 Features
+🛒 User & Product Features
+Feature	Status	Description
+Sign Up	☑	Create a new user account
+Log In	☑	Secure authentication
+Cart	☑	Add and manage cart items
+Checkout	☑	Fill delivery and order details
+Subtotal	☑	Automatic price calculation
+Wishlist	☑	Save favorite products
+Orders	☑	View order history
+Product Search	☑	Real-time search
+Design Tool	☑	Customize cake designs
+Order Tracking	☑	Live order status
+🛠️ Admin Features
+Feature	Status	Description
+Admin Login	☑	Role-based admin access
+Product Management	☑	Add, edit, delete products
+Order Management	☑	Update order status
+Dashboard	☑	Monthly analytics
+Sentiment Analysis	☑	AI-based review insights
+🤖 AI-Powered Features (Gemini API)
 
- * TAILWINDCSS
+💬 AI Chatbot for product search, booking, and support
 
- * TypeScript 
+🧠 Sentiment Analysis on customer reviews
 
- * FRAMER MOTION
- 
- * MONGODB
+📈 Customer Insight Analysis for admins
 
- * CLOUDINARY STORAGE
+🛍️ Smart product assistance (future-ready)
 
- * GEMINI API 
+🧰 Built With
 
- * SMTP 
+Frontend: HTML, CSS, React.js, Next.js
 
+Styling: Tailwind CSS
 
-## Demonstration
+Animations: AOS, Framer Motion
 
+Backend: Next.js API Routes
+
+Database: MongoDB, Mongoose
+
+Media Storage: Cloudinary
+
+AI Integration: Gemini API
+
+Email Services: SMTP
+
+Language: JavaScript / TypeScript
+
+🖼️ Demonstration
 
 
 ![App Screenshot](/public/assistant.png)
@@ -68,21 +82,42 @@ Crazy Cakes is a full-stack e-commerce web application built using Next.js and R
 ![App Screenshot](/public/order.png)
 
 
-## Getting Started
+⚙️ Getting Started
+Prerequisites
 
-#### Prerequisites
+Node.js (v18 or higher)
 
-#### RUN
-     npm run dev
+MongoDB database
 
-### Installation
+Cloudinary account
 
- * Create new project on Next js 
-  ```http
-  npx create-next-app@latest
-```
- * Yarn Dev
-  ```http
-  yarn create next-app
-```
-* Get free API key from Gemini 
+Gemini API key
+
+Installation
+
+Create a Next.js project:
+
+npx create-next-app@latest
+
+
+Or using Yarn:
+
+yarn create next-app
+
+
+Install dependencies and start the development server:
+
+npm install
+npm run dev
+
+🔑 Environment Variables
+
+Create a .env.local file and add the following:
+
+MONGODB_URI=your_mongodb_url
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+GEMINI_API_KEY=your_gemini_api_key
+SMTP_EMAIL=your_email
+SMTP_PASSWORD=your_password
