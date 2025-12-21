@@ -23,6 +23,8 @@ On the backend, MongoDB with Mongoose is used for structured and scalable data m
 🚀 Features
 🛒 User & Product Features
 Feature	Status	Description
+
+Docker	☑	Containerized for easy deployment
 Sign Up	☑	Create a new user account
 Log In	☑	Secure authentication
 Cart	☑	Add and manage cart items

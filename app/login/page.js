@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Container from "../container";
 import TermsModal from "../components/TermsModal";
 import { MdLocationOn, MdPhone, MdEmail } from "react-icons/md";
+import Loader from "../loader"
 const LoginPage = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -89,7 +90,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fffaf3] flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-[#fffaf3] flex items-center justify-center sm:px-4 px-3 sm:py-8 py-6">
+        
+        
       <ToastContainer position="top-right" autoClose={2000} theme="colored" />
 
       {/* MAIN WRAPPER – responsive columns */}
@@ -101,7 +104,7 @@ const LoginPage = () => {
             <MdLocationOn className="text-2xl sm:text-3xl" />
             <div>
               <h3 className="text-lg sm:text-xl font-semibold">Address</h3>
-              <p className="text-sm sm:text-md">123 Bakery Street, Sweet City, 560001</p>
+              <p className="text-sm sm:text-md">Crazy Cakes Bakery , Malhaur, Gomti Nagar</p>
             </div>
           </div>
 
@@ -110,7 +113,7 @@ const LoginPage = () => {
             <MdPhone className="text-2xl sm:text-3xl" />
             <div>
               <h3 className="text-lg sm:text-xl font-semibold">Phone</h3>
-              <p className="text-sm sm:text-md">+91 98765 43210</p>
+              <p className="text-sm sm:text-md">+91 9555105186</p>
             </div>
           </div>
 
@@ -119,14 +122,14 @@ const LoginPage = () => {
             <MdEmail className="text-2xl sm:text-3xl" />
             <div>
               <h3 className="text-lg sm:text-xl font-semibold">Email</h3>
-              <p className="text-sm sm:text-md">support@crazycakes.com</p>
+              <p className="text-sm sm:text-md">himanshu094405@gmail.com</p>
             </div>
           </div>
         </div>
 
         {/* RIGHT SIDE – LOGIN FORM */}
         <div className="w-full md:w-2/3 flex justify-center items-center p-6 sm:p-10 bg-white">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-8 shadow-inner border border-[#f1e4d8]">
+          <div className="w-full max-w-md rounded-2xl bg-white sm:p-6 lg:p-8 p-4 shadow-inner border border-[#f1e4d8]">
             <h1 className="mb-2 text-2xl font-semibold text-[#5b3a29]">Login</h1>
             <p className="mb-6 text-sm text-[#8a6a52]">
               Welcome back to Crazy Cakes. Please sign in to continue.
@@ -149,7 +152,7 @@ const LoginPage = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                  className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                   placeholder="you@example.com"
                 />
               </div>
@@ -165,7 +168,7 @@ const LoginPage = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 pr-10 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                    className="w-full rounded-lg border border-[#e5d4c4] text-[#5b3a29] bg-white px-3 py-2 pr-10 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                     placeholder="••••••••"
                   />
                   <button

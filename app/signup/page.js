@@ -125,7 +125,7 @@ const SignupPage = () => {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                  className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                   placeholder="Your full name"
                 />
               </div>
@@ -141,7 +141,7 @@ const SignupPage = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                  className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                   placeholder="you@example.com"
                 />
               </div>
@@ -159,7 +159,7 @@ const SignupPage = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 pr-10 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                    className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 pr-10 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                     placeholder="Create a password"
                   />
                   <button
@@ -182,7 +182,7 @@ const SignupPage = () => {
                   type="tel"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                  className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                   placeholder="10-digit number"
                 />
               </div>
@@ -196,7 +196,7 @@ const SignupPage = () => {
                   id="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                  className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                   rows={2}
                   placeholder="House no, street, area"
                 />
@@ -212,7 +212,7 @@ const SignupPage = () => {
                   type="number"
                   value={formData.pincode}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                  className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                   placeholder="e.g. 110001"
                 />
               </div>
@@ -226,7 +226,7 @@ const SignupPage = () => {
                   id="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
+                  className="w-full rounded-lg border text-[#5b3a29] border-[#e5d4c4] bg-white px-3 py-2 text-sm outline-none focus:border-[#5b3a29] focus:ring-2 focus:ring-[#5b3a29]/20"
                 >
                   <option value="user">User</option>
                   <option value="admin">Admin</option>
