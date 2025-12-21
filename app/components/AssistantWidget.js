@@ -564,7 +564,22 @@ const AssistantWidget = () => {
                 Searching...
               </span>
             ) : (
-              "🔍 Search Products"
+              <span className="flex items-center gap-2">
+    <svg
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+      />
+    </svg>
+    Search Products
+  </span>
             )}
           </button>
         </div>
@@ -1023,7 +1038,7 @@ const AssistantWidget = () => {
               
               {/* Products Grid */}
               {msg.products && msg.products.length > 0 && (
-                <div className="mt-3 grid grid-cols-2 gap-3">
+                <div className="mt-3 grid sm:grid-cols-2 grid-cols-1 gap-3">
                   {msg.products.map((product, productIdx) => {
                     const images = Array.isArray(product.images) ? product.images : [];
                     const mainImage = images[0].url;
