@@ -16,10 +16,10 @@ const FeatureCard = ({
 }) => {
   return (
     <div
-      className="group grid grid-cols-1 md:grid-cols-2 gap-6 items-center
-                 border border-[#d6d4d4] rounded-2xl
-                 lg:p-8 md:p-6 p-4
-                 shadow-md hover:shadow-[0px_0px_6px_rgba(0,0,0,0.3)]
+      className="group grid grid-cols-1 md:grid-cols-2 md:gap-6 sm:gap-4 gap-3 items-center 
+                 border border-[#d6d4d4] rounded-2xl 
+                 lg:p-8 md:p-6 p-4 
+                 shadow-md hover:shadow-[0px_0px_6px_rgba(0,0,0,0.3)] 
                  transition-all duration-300 min-h-[420px]"
       data-aos="fade-up"
     >
@@ -31,9 +31,8 @@ const FeatureCard = ({
 
         {/* DESCRIPTION */}
         <p
-          className="mt-6 sm:mt-4
-                     xl:mt-16 lg:mt-12 md:mt-10 sm:mt-8
-                     xl:group-hover:mt-8 lg:group-hover:mt-6 md:group-hover:mt-5 sm:group-hover:mt-4
+          className="xl:mt-16 lg:mt-12 md:mt-10 sm:mt-8 mt-2
+                     xl:group-hover:mt-8 lg:group-hover:mt-6 md:group-hover:mt-5 sm:group-hover:mt-4 group-hover:mt-3
                      transition-all duration-300
                      text-[#714f36] md:text-lg text-sm leading-relaxed"
         >
@@ -49,13 +48,12 @@ const FeatureCard = ({
               ? "/category/cake"
               : "#"
           }
-          className="mt-8 sm:mt-5
-                     xl:mt-20 lg:mt-16 md:mt-12 sm:mt-10
+          className="inline-flex items-center gap-2
+                     xl:mt-20 lg:mt-16 md:mt-12 sm:mt-10 mt-3
                      xl:group-hover:mt-10 lg:group-hover:mt-8 md:group-hover:mt-6 sm:group-hover:mt-5 group-hover:mt-4
-                     inline-flex items-center gap-2
                      transition-all duration-300
                      border border-[#5B3A29] 
-                     px-6 sm:py-3 py-2 rounded-full 
+                     px-6 sm:py-3 py-1.5 rounded-full 
                      font-semibold text-[#5B3A29]
                      hover:bg-white group-hover:shadow-[0px_0px_8px_rgba(0,0,0,0.4)]"
         >
@@ -70,14 +68,13 @@ const FeatureCard = ({
 
       {/* IMAGE */}
       <div
-        className={`relative flex justify-center ${
-          reverse ? "order-1 md:order-1" : "order-2"
+        className={`relative flex justify-center sm:mt-0 mt-1 ${
+          reverse ? "order-1 md:order-1" : "order-2 "
         }`}
       >
         {/* BADGE */}
         <div
-          className="absolute top-2 right-3 transform translate-y-6
-                     sm:translate-y-0 sm:opacity-100
+          className="absolute top-2 right-3 transform translate-y-6 opacity-0
                      group-hover:translate-y-0 group-hover:opacity-100
                      transition-all duration-500 z-20"
         >
@@ -98,7 +95,12 @@ const FeatureCard = ({
           src={image}
           alt={title}
           className={`rounded-2xl border border-[#5B3A29] shadow-lg transition-all duration-300
-            ${image === "/design_tool.png" ? "w-full max-w-lg" : "w-full max-w-md"}`}
+            ${
+              image === "/design_tool.png"
+                ? "w-full max-w-lg"
+                : "w-full max-w-md"
+            }
+          `}
         />
       </div>
     </div>
