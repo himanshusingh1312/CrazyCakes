@@ -3,62 +3,28 @@ import { connectDB } from "@/lib/dbConnect";
 import { User } from "@/lib/schema/user";
 import { Order } from "@/lib/schema/order";
 import { Coupon } from "@/lib/schema/coupon";
-import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
-
-// Verify token helper
-function verifyToken(request) {
+export async function DELETE(request) {
   try {
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return null;
-    }
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
-    return decoded;
-  } catch (error) {
-    console.error("Token verification error:", error);
-    return null;
-  }
-}
-
-// Delete user (admin only)
-export async function DELETE(request, { params }) {
-  try {
-    const decoded = verifyToken(request);
-    if (!decoded || !decoded.userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     await connectDB();
 
-    // Check if user is admin
-    const admin = await User.findById(decoded.userId);
-    if (!admin || admin.type !== "admin") {
-      return NextResponse.json(
-        { error: "Admin access required" },
-        { status: 403 }
-      );
-    }
+    // ✅ Get ID from URL (MOST RELIABLE)
+    const url = new URL(request.url);
+    const userId = url.pathname.split("/").pop();
 
-    const userId = params.id;
-
-    // Prevent admin from deleting themselves
-    if (userId === decoded.userId) {
+    if (!userId) {
       return NextResponse.json(
-        { error: "Cannot delete your own account" },
+        { error: "User ID missing in request" },
         { status: 400 }
       );
     }
 
-    // Check if user exists
+    // Prevent deleting admin users
     const user = await User.findById(userId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Prevent deleting admin users
     if (user.type === "admin") {
       return NextResponse.json(
         { error: "Cannot delete admin users" },
@@ -66,13 +32,8 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // Delete user's orders
     await Order.deleteMany({ user: userId });
-
-    // Delete user's coupons
     await Coupon.deleteMany({ user: userId });
-
-    // Delete user
     await User.findByIdAndDelete(userId);
 
     return NextResponse.json(
@@ -87,4 +48,3 @@ export async function DELETE(request, { params }) {
     );
   }
 }
-

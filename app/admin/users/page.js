@@ -72,7 +72,12 @@ const AdminUsersPage = () => {
         if (response.ok) {
           // Users are already filtered by API to only return type "user"
           console.log("Fetched users:", data.users);
-          setUsers(data.users || []);
+          const normalizedUsers = (data.users || []).map((u) => ({
+  ...u,
+  _id: u._id || u.id, // ✅ force Mongo-style _id
+}));
+
+setUsers(normalizedUsers);
         } else {
           console.error("Error fetching users:", data.error);
           toast.error(data.error || "Failed to fetch users");
