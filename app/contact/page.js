@@ -6,6 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Container from "../container";
 import Header from "../header/page";
 import Footer from "../footer/page";
+
+export const metadata = {
+  title: "Contact Crazy Cakes",
+  description: "Get in touch with Crazy Cakes for cake orders and support.",
+  alternates: {
+    canonical: "https://crazycakes.online/contact",
+  },
+}
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: "",

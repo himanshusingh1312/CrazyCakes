@@ -7,6 +7,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Container from "../../container";
 import Header from "../../header/page";
 
+
+export const metadata = {
+  title: "Crazy Cakes Blog",
+  description: "Cake ideas, tips, and delivery guides.",
+  alternates: {
+    canonical: "https://crazycakes.online/blog",
+  },
+};
 const BlogsPage = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({

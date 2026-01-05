@@ -13,6 +13,13 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FcAddressBook } from "react-icons/fc";
 import { TbMapPinCode } from "react-icons/tb";
 import Loader from "../loader";
+
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 const ProfilePage = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);

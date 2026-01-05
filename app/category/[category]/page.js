@@ -9,6 +9,14 @@ import Footer from "../../footer/page";
 import { FaSearch } from "react-icons/fa";
 import Pagination from "../../components/Pagination";
 import Loader from "../../loader";
+
+export const metadata = {
+  title: "Order Cakes Online",
+  description: "Buy delicious cakes online from Crazy Cakes.",
+  alternates: {
+    canonical: "https://crazycakes.online/category/cake",
+  },
+};
 const CategoryPage = () => {
   const params = useParams();
   const router = useRouter();

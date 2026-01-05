@@ -11,8 +11,19 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Crazy Cakes",
-  description: "Welcome to Crazy Cakes - Cakes & Pastries",
+  metadataBase: new URL("https://crazycakes.online"),
+
+  title: {
+    default: "Crazy Cakes | Order Cakes & Pastries Online",
+    template: "%s | Crazy Cakes",
+  },
+
+  description: "Order fresh cakes and pastries online from Crazy Cakes.",
+
+  alternates: {
+    canonical: "https://crazycakes.online",
+  },
+
   icons: {
     icon: [{ url: "/cakelogo.png", sizes: "32x32", type: "image/png" }],
     apple: [{ url: "/cakelogo.png", sizes: "180x180" }],
